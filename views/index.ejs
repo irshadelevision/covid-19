@@ -4,6 +4,27 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Corona Graph</title>
+
+    <script>
+        document.addEventListener('contextmenu', event => event.preventDefault());
+        function copyToClipboard() {
+
+            var aux = document.createElement("input");
+            aux.setAttribute("value", "print screen disabled!");      
+            document.body.appendChild(aux);
+            aux.select();
+            document.execCommand("copy");
+            // Remove it from the body
+            document.body.removeChild(aux);
+            alert("Print screen disabled!");
+        }
+
+        $(window).keyup(function(e){
+            if(e.keyCode == 44){
+                copyToClipboard();
+            }
+        });
+    </script>
     
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
