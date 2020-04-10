@@ -8,38 +8,42 @@ require('ejs');
 // quit app after 10 minute to restart app.
 setTimeout(() => {
   process.exit()
-}, 600000)
+}, 24000000)
 
 let situationsReportsData, report, fatalityRateByAgeData;
 
 let getData = async () =>{
-  const reports = await PluginManager.getReports();
-  report = reports[0][0].table[0];
-  //const reportsByCountries = await PluginManager.getReportsByCountries(['united-arab-emirates']);
-  //const deaths = await PluginManager.getDeaths();
-  const situationsReports = await PluginManager.getSituationReports();
-  situationsReportsData = situationsReports[0]
-  //const taskforce = await PluginManager.getTaskForceInfoUS();
-  //const globalData = await PluginManager.getGlobalData();
-  //const testsInUS = await PluginManager.getTestsInUS();
-  const fatalityRateByAge = await PluginManager.getFatalityRateByAge();
-  fatalityRateByAgeData = fatalityRateByAge[0];
-  //const fatalityRateBySex = await PluginManager.getFatalityRateBySex();
-  //const fatalityRateByComorbidities = await PluginManager.getFatalityRateByComorbidities();
-  //const countriesWhereCoronavirusHasSpread = await PluginManager.getCountriesWhereCoronavirusHasSpread();
-  //const travelHealthNotices = await PluginManager.getTravelHealthNotices();
-  //const getAllCasesInAmerica = await PluginManager.getAllCasesInAmerica();
-  //const getAllCasesInEurope = await PluginManager.getAllCasesInEurope();
-  //const caseStatusUndeEvalutationInPR = await PluginManager.getCaseStatusUndeEvalutationInPR();
-  //const casesInAllUSStates = await PluginManager.getCasesInAllUSStates();
-  //const capacityInfoUSHealthFacilities = await PluginManager.getCapacityInfoUSHealthFacilities();
-  //const aggregatedFacilityCapacityCounty = await PluginManager.getAggregatedFacilityCapacityCounty();
-  //const johnsHopkinsDataDailyReport = await PluginManager.getJohnsHopkinsDataDailyReport();
-  //const prGeneralResults = await PluginManager.getPRGeneralResults();
-  //const prDataByRegion = await PluginManager.getPRDataByRegion();
-  //const prDataBySex = await PluginManager.getPRDataBySex();
-  // await PluginManager.downloadReportsToCSV();
-  console.log(new Date(), 'Data updated')
+  try{
+    const reports = await PluginManager.getReports();
+    report = reports[0][0].table[0];
+    //const reportsByCountries = await PluginManager.getReportsByCountries(['united-arab-emirates']);
+    //const deaths = await PluginManager.getDeaths();
+    const situationsReports = await PluginManager.getSituationReports();
+    situationsReportsData = situationsReports[0]
+    //const taskforce = await PluginManager.getTaskForceInfoUS();
+    //const globalData = await PluginManager.getGlobalData();
+    //const testsInUS = await PluginManager.getTestsInUS();
+    const fatalityRateByAge = await PluginManager.getFatalityRateByAge();
+    fatalityRateByAgeData = fatalityRateByAge[0];
+    //const fatalityRateBySex = await PluginManager.getFatalityRateBySex();
+    //const fatalityRateByComorbidities = await PluginManager.getFatalityRateByComorbidities();
+    //const countriesWhereCoronavirusHasSpread = await PluginManager.getCountriesWhereCoronavirusHasSpread();
+    //const travelHealthNotices = await PluginManager.getTravelHealthNotices();
+    //const getAllCasesInAmerica = await PluginManager.getAllCasesInAmerica();
+    //const getAllCasesInEurope = await PluginManager.getAllCasesInEurope();
+    //const caseStatusUndeEvalutationInPR = await PluginManager.getCaseStatusUndeEvalutationInPR();
+    //const casesInAllUSStates = await PluginManager.getCasesInAllUSStates();
+    //const capacityInfoUSHealthFacilities = await PluginManager.getCapacityInfoUSHealthFacilities();
+    //const aggregatedFacilityCapacityCounty = await PluginManager.getAggregatedFacilityCapacityCounty();
+    //const johnsHopkinsDataDailyReport = await PluginManager.getJohnsHopkinsDataDailyReport();
+    //const prGeneralResults = await PluginManager.getPRGeneralResults();
+    //const prDataByRegion = await PluginManager.getPRDataByRegion();
+    //const prDataBySex = await PluginManager.getPRDataBySex();
+    // await PluginManager.downloadReportsToCSV();
+    console.log(new Date(), 'Data updated')
+  } catch {
+    console.log(new Date, 'unable to update')
+  }
   setTimeout(async () => {
     await getData();
   }, 10000)
