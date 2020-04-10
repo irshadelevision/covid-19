@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Corona Graph</title>
+    
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.css" integrity="sha256-aa0xaJgmK/X74WM224KMQeNQC2xYKwlAt08oZqjeF0E=" crossorigin="anonymous" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.bundle.min.js" integrity="sha256-TQq84xX6vkwR0Qs1qH5ADkP+MvH0W+9E7TdHJsoIQiM=" crossorigin="anonymous"></script>
+    
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+    
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.css">
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.js"></script>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css">
+    <style>
+        body {
+            background-color:white;
+            color: black;
+            font-family: Arial, Helvetica, sans-serif;
+            background: black;
+            color: white;
+        }
+
+        table > tbody > tr > td, #table_info, label, #table_previous {
+            background: black;
+            color: white;
+        } 
+
+        .part {
+            display: grid;
+            margin: 30px auto;
+            min-width: 1366px;
+            grid-template-columns: 30% 1% 69%;
+
+        }
+
+        .all-report {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            text-align: center;
+        }
+
+        a { color: #FF0000; }
+        
+        .spacer {
+            display: inline-block;
+            min-width: 60px;
+            max-width: 60px;
+            width: 60px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container part">
+        <div class="part-1">
+            <div class="all-report">
+                <div>
+                    <div><h3>Cases</h3></div>
+                    <div><h3 id="case-data"></h3></div>
+                </div>
+                <div>
+                    <div><h3>Death</h3></div>
+                    <div><h3 id="death-data"></h3></div>
+                </div>
+                <div>
+                    <div><h3>Recovered</h3></div>
+                    <div><h3 id="recovered-data"></h3></div>
+                </div>
+                
+            </div>
+            <div><hr></div>
+            <div>
+                <h3 style="text-align: center;"><u>Fatality Rate By Age (%)</u></h3>
+                <div class="fatality">
+                    <canvas id="fatalityChart" width="400" height="400"></canvas>
+                </div>
+                <script>
+                    let fatalityRateByAgeData = [];
+                    fetch('/fatality-rate-by-age-json')
+                    .then(result => result.json())
+                    .then(data => {
+                        for (i = 0; i < data.length; i++){
+                            if(data[i].DeathRateAllCases.slice(0,data[i].DeathRateAllCases.length - 1) == 'no fatalitie'){
+                                fatalityRateByAgeData[i]  = 0;
+                            } else {
+                                fatalityRateByAgeData[i] = parseFloat(data[i].DeathRateAllCases.slice(0,data[i].DeathRateAllCases.length - 1));
+                            }
+                        }
+                        console.log(fatalityRateByAgeData);
+                        let fatialityChart = document.getElementById('fatalityChart').getContext('2d');
+                        var myBarChart = new Chart(fatialityChart, {
+                            type: 'bar',
+                            data: {
+                                labels: ['80+', '70-79', '60-69', '50-59', '40-49', '30-39', '20-29', '10-19', '0-9'],
+                                datasets: [{
+                                    label: '# Years of old',
+                                    data: fatalityRateByAgeData,
+                                    backgroundColor: [
+                                        'rgba(255, 99, 132, 0.2)',
+                                        'rgba(54, 162, 235, 0.2)',
+                                        'rgba(255, 206, 86, 0.2)',
+                                        'rgba(75, 192, 192, 0.2)',
+                                        'rgba(153, 102, 255, 0.2)',
+                                        'rgba(255, 159, 64, 0.2)'
+                                    ],
+                                    borderColor: [
+                                        'rgba(255, 99, 132, 1)',
+                                        'rgba(54, 162, 235, 1)',
+                                        'rgba(255, 206, 86, 1)',
+                                        'rgba(75, 192, 192, 1)',
+                                        'rgba(153, 102, 255, 1)',
+                                        'rgba(255, 159, 64, 1)'
+                                    ],
+                                    borderWidth: 1
+                                }]
+                            },
+                            options: {
+                                scales: {
+                                    yAxes: [{
+                                        ticks: {
+                                            beginAtZero: true
+                                        }
+                                    }]
+                                }
+                            }
+                            });
+                        })
+                </script>
+                <div>
+                    <div style="display:inline-block">
+                        <h3>UAE</h3>
+                        <div>Total Case: <span id="uae-total-case"></span></div>
+                        <div>New Case: <span id="uae-new-case"></span></div>
+                        <div>Total Death: <span id="uae-total-death"></span></div>
+                        <div>New Death: <span id="uae-new-death"></span></div>
+                        <div>Total Recovered: <span id="uae-total-recovery"></span></div>
+                    </div>
+                    <div class="spacer"></div>
+                    <div style="display:inline-block">
+                        <h3>India</h3>
+                        <div>Total Case: <span id="india-total-case"></span></div>
+                        <div>New Case: <span id="india-new-case"></span></div>
+                        <div>Total Death: <span id="india-total-death"></span></div>
+                        <div>New Death: <span id="india-new-death"></span></div>
+                        <div>Total Recovery: <span id="india-total-recovery"></span></div>
+                    </div>
+                </div>
+                <div style="padding-top: 20px;">
+                    <div style="display:inline-block">
+                        <h3>UK</h3>
+                        <div>Total Case: <span id="uk-total-case"></span></div>
+                        <div>New Case: <span id="uk-new-case"></span></div>
+                        <div>Total Death: <span id="uk-total-death"></span></div>
+                        <div>New Death: <span id="uk-new-death"></span></div>
+                        <div>Total Recovered: <span id="uk-total-recovery"></span></div>
+                    </div>
+                    <div class="spacer"></div>
+                    <div style="display:inline-block">
+                        <h3>Canada</h3>
+                        <div>Total Case: <span id="canada-total-case"></span></div>
+                        <div>New Case: <span id="canada-new-case"></span></div>
+                        <div>Total Death: <span id="canada-total-death"></span></div>
+                        <div>New Death: <span id="canada-new-death"></span></div>
+                        <div>Total Recovery: <span id="canada-total-recovery"></span></div>
+                    </div>
+                </div>
+                <div  style="padding-top: 20px;">
+                    <div style="display:inline-block">
+                        <h3>Lebanon</h3>
+                        <div>Total Case: <span id="lebanon-total-case"></span></div>
+                        <div>New Case: <span id="lebanon-new-case"></span></div>
+                        <div>Total Death: <span id="lebanon-total-death"></span></div>
+                        <div>New Death: <span id="lebanon-new-death"></span></div>
+                        <div>Total Recovered: <span id="lebanon-total-recovery"></span></div>
+                    </div>
+                    <div class="spacer"></div>
+                    <div style="display:inline-block">
+                        <h3>Philippines</h3>
+                        <div>Total Case: <span id="philippines-total-case"></span></div>
+                        <div>New Case: <span id="philippines-new-case"></span></div>
+                        <div>Total Death: <span id="philippines-total-death"></span></div>
+                        <div>New Death: <span id="philippines-new-death"></span></div>
+                        <div>Total Recovery: <span id="philippines-total-recovery"></span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div></div>
+        <div class="part-2">
+            <table class="table table-striped table-bordered" id="table">
+                <thead>
+                    <tr>
+                        <td>Country</td>
+                        <td>TotalCases</td>
+                        <td>NewCases</td>
+                        <td>TotalDeaths</td>
+                        <td>NewDeaths</td>
+                        <td>TotalRecovered</td>
+                        <td>ActiveCases</td>
+                    </tr>
+                </thead>
+            </table>
+            <script>
+                $('#table').DataTable({
+                    pageLength: 23,
+                    lengthMenu: [23],
+                    ajax: {
+                        url: '/report-json',
+                        type: 'GET',  
+                        dataSrc: function(json) {  
+                            let data = [];
+                            json.forEach(element => {
+                                if(element.Country == "World" ||element.Country == "Total:"){
+                                    let caseData = document.getElementById('case-data');
+                                    let deathData = document.getElementById('death-data');
+                                    let recoveredData = document.getElementById('recovered-data');
+
+                                    caseData.innerHTML = element.TotalCases;
+                                    deathData.innerHTML = element.TotalDeaths;
+                                    recoveredData.innerHTML = element.TotalRecovered
+                                } else {
+                                    if(element.Country == "UAE"){
+                                        console.log(element)
+                                        $('#uae-total-case').html(element.TotalCases);
+                                        $('#uae-new-case').html(element.NewCases);
+                                        $('#uae-total-death').html(element.TotalDeaths);
+                                        $('#uae-new-death').html(element.NewDeaths);
+                                        $('#uae-total-recovery').html(element.TotalRecovered);
+                                    }
+                                    if(element.Country == "India"){
+                                        console.log(element)
+                                        $('#india-total-case').html(element.TotalCases);
+                                        $('#india-new-case').html(element.NewCases);
+                                        $('#india-total-death').html(element.TotalDeaths);
+                                        $('#india-new-death').html(element.NewDeaths);
+                                        $('#india-total-recovery').html(element.TotalRecovered);
+                                    }
+                                    if(element.Country == "UK"){
+                                        console.log(element)
+                                        $('#uk-total-case').html(element.TotalCases);
+                                        $('#uk-new-case').html(element.NewCases);
+                                        $('#uk-total-death').html(element.TotalDeaths);
+                                        $('#uk-new-death').html(element.NewDeaths);
+                                        $('#uk-total-recovery').html(element.TotalRecovered);
+                                    }
+                                    if(element.Country == "Canada"){
+                                        console.log(element)
+                                        $('#canada-total-case').html(element.TotalCases);
+                                        $('#canada-new-case').html(element.NewCases);
+                                        $('#canada-total-death').html(element.TotalDeaths);
+                                        $('#canada-new-death').html(element.NewDeaths);
+                                        $('#canada-total-recovery').html(element.TotalRecovered);
+                                    }
+                                    if(element.Country == "Lebanon"){
+                                        console.log(element)
+                                        $('#lebanon-total-case').html(element.TotalCases);
+                                        $('#lebanon-new-case').html(element.NewCases);
+                                        $('#lebanon-total-death').html(element.TotalDeaths);
+                                        $('#lebanon-new-death').html(element.NewDeaths);
+                                        $('#lebanon-total-recovery').html(element.TotalRecovered);
+                                    }
+                                    if(element.Country == "Philippines"){
+                                        console.log(element)
+                                        $('#philippines-total-case').html(element.TotalCases);
+                                        $('#philippines-new-case').html(element.NewCases);
+                                        $('#philippines-total-death').html(element.TotalDeaths);
+                                        $('#philippines-new-death').html(element.NewDeaths);
+                                        $('#philippines-total-recovery').html(element.TotalRecovered);
+                                    }
+                                    data.push(element)
+                                }
+                            })
+                            return data;
+                        }
+                    },
+                    columns: [
+                        {"data": "Country"},
+                        {"data": "TotalCases"},
+                        {"data": "NewCases"},
+                        {"data": "TotalDeaths"},
+                        {"data": "NewDeaths"},
+                        {"data": "TotalRecovered"},
+                        {"data": "ActiveCases"},
+                    ],
+                    order: [1, 'desc']
+                    
+                });
+                setTimeout(() => {
+                    location.reload();
+                }, 10000);
+            </script>
+        </div>
+    </div>
+    <div class="container">
+        <div>
+            <h3 style="color: white; font-size: 15px">References<h3>
+            <ul style="color: white; font-size: 15px; font-style: italic"> 
+                <li>
+                    worldometers. 2020. Coronavirus. [online] Available at: <a href="https://www.worldometers.info/coronavirus/">https://www.worldometers.info/coronavirus/</a> [Accessed 16 March 2020].
+                </li>
+                <li>
+                    cdc.gov. 2020. From the White House Coronavirus Task Force [online] Available at: <a href="https://www.cdc.gov/coronavirus/2019-ncov/cases-updates/from-the-white-house-task-force.html/">https://www.cdc.gov/coronavirus/2019-ncov/cases-updates/from-the-white-house-task-force.html/</a>
+                </li>
+                <li>
+                    who. 2020. Coronavirus disease (COVID-2019) situation reports [online] Available at: https://www.who.int/emergencies/diseases/novel-coronavirus-2019/situation-reports/ [Accessed 16 March 2020]
+                </li>
+                <li>
+                    <a href="http://weekly.chinacdc.cn/en/article/id/e53946e2-c6c4-41e9-9a9b-fea8db1a8f51">The Epidemiological Characteristics of an Outbreak of 2019 Novel Coronavirus Diseases (COVID-19)</a> - China CCDC, February 17 2020
+                </li>
+                <li>
+                    <a href="https://www.who.int/docs/default-source/coronaviruse/who-china-joint-mission-on-covid-19-final-report.pdf">Report of the WHO-China Joint Mission on Coronavirus Disease 2019 (COVID-19)</a> [Pdf] - World Health Organization, Feb. 28, 2020
+                </li>
+                <li>
+                    paho(Organizacion Panamericano de la Salud). 2020. Enfermedad por el Coronavirus ‎‎(COVID-19)‎. [online] Available at: <a href="https://www.paho.org/es/temas/coronavirus/enfermedad-por-coronavirus-covid-19/">https://www.paho.org/es/temas/coronavirus/enfermedad-por-coronavirus-covid-19/</a> [Accessed 21 Mar 2020]
+                </li>
+                <li>
+                    salud.gov. 2020 . ESTATUS DE CASOS BAJO EVALUACIÓN POR COVID-19 [online] Available at: <a href="http://www.salud.gov.pr/Pages/coronavirus.aspx/">http://www.salud.gov.pr/Pages/coronavirus.aspx/</a> [Accessed 22 Mar 2020]
+                </li>
+                <li>
+                    covidcaremap.org. 2020. COVID CARE [online] Available at: <a href="https://www.covidcaremap.org/#data/">https://www.covidcaremap.org/#data/</a> [Accessed 26 Mar 2020]
+                </li>
+                
+            </ul>
+            
+            <h3 style="color: white; font-size: 15px">No Responsibility Disclaimer</h3>
+            <ul>
+                <li>I will not be responsible for anything that happened with these data.</li>
+                <li>I getting these data from the sources in the reference.</li>
+                <li>Also i did not encourage anyone to use these data for any purpose.</li>
+            </ul>
+            
+            <h3 style="color: white; font-size: 15px">Special Thanks</h3>
+            <ul>
+                <li>
+                        Special Thanks to <a href="https://github.com/ChrisMichaelPerezSantiago">Chris Michael</a> for his API.
+                </li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>

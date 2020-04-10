@@ -1,0 +1,19 @@
+{
+  "name": "corona-report",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Irshad",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "chart.js": "^2.9.3",
+    "covid19-api": "^1.1.8",
+    "ejs": "^3.0.2",
+    "express": "^4.17.1",
+    "fs-extra": "^9.0.0"
+  }
+}
