@@ -10,7 +10,7 @@ setTimeout(() => {
   process.exit()
 }, 24000000)
 
-let situationsReportsData, report, fatalityRateByAgeData;
+let situationsReportsData, report;
 
 let getData = async () =>{
   try{
@@ -23,8 +23,7 @@ let getData = async () =>{
     //const taskforce = await PluginManager.getTaskForceInfoUS();
     //const globalData = await PluginManager.getGlobalData();
     //const testsInUS = await PluginManager.getTestsInUS();
-    const fatalityRateByAge = await PluginManager.getFatalityRateByAge();
-    fatalityRateByAgeData = fatalityRateByAge[0];
+    //const fatalityRateByAge = await PluginManager.getFatalityRateByAge();
     //const fatalityRateBySex = await PluginManager.getFatalityRateBySex();
     //const fatalityRateByComorbidities = await PluginManager.getFatalityRateByComorbidities();
     //const countriesWhereCoronavirusHasSpread = await PluginManager.getCountriesWhereCoronavirusHasSpread();
@@ -69,9 +68,7 @@ app.get('/situation-report-json', (req, res) => {
     return res.json(situationsReportsData);
 });
 
-app.get('/fatality-rate-by-age-json', (req, res) => {
-    return res.json(fatalityRateByAgeData);
-});
+
 
 
 app.listen(6020, () => {

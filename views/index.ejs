@@ -112,84 +112,6 @@
             </div>
             <div><hr></div>
             <div>
-                <h3 style="text-align: center;"><u>Fatality Rate By Age (%)</u></h3>
-                <div class="fatality">
-                    <!-- <canvas id="fatalityChart" width="400" height="400"></canvas> -->
-                    <div>
-                        <div>80+ Years old: <span class="text-danger" id="80plus"></span></div>
-                        <div>70 - 79 Years old: <span class="text-danger" id="70-79"></span></div>
-                        <div>60 - 69 Years old: <span  class="text-danger" id="60-69"></span></div>
-                        <div>50 - 59 Years old: <span  class="text-danger" id="50-59"></span></div>
-                        <div>40 - 49 Years old: <span  class="text-danger" id="40-49"></span></div>
-                        <div>30 - 78 Years old: <span  class="text-danger" id="30-39"></span></div>
-                        <div>20 - 29 Years old: <span  class="text-danger" id="20-29"></span></div>
-                        <div>10 - 19 Years old: <span  class="text-danger" id="10-19"></span></div>
-                        <div>0 - 9 Years old: <span  class="text-danger" id="0-9"></span></div>
-                    </div>
-                </div>
-                <script>
-                    let fatalityRateByAgeData = [];
-                    fetch('/fatality-rate-by-age-json')
-                    .then(result => result.json())
-                    .then(data => {
-                        console.log(data[0].DeathRateAllCases)
-                        $('#80plus').html(data[0].DeathRateAllCases)
-                        $('#70-79').html(data[1].DeathRateAllCases)
-                        $('#60-69').html(data[2].DeathRateAllCases)
-                        $('#50-59').html(data[3].DeathRateAllCases)
-                        $('#40-49').html(data[4].DeathRateAllCases)
-                        $('#30-39').html(data[5].DeathRateAllCases)
-                        $('#20-29').html(data[6].DeathRateAllCases)
-                        $('#10-19').html(data[7].DeathRateAllCases)
-                        $('#0-9').html(data[8].DeathRateAllCases)
-                        /*
-                        for (i = 0; i < data.length; i++){
-                            if(data[i].DeathRateAllCases.slice(0,data[i].DeathRateAllCases.length - 1) == 'no fatalitie'){
-                                fatalityRateByAgeData[i]  = 0;
-                            } else {
-                                fatalityRateByAgeData[i] = parseFloat(data[i].DeathRateAllCases.slice(0,data[i].DeathRateAllCases.length - 1));
-                            }
-                        }
-                        let fatialityChart = document.getElementById('fatalityChart').getContext('2d');
-                        var myBarChart = new Chart(fatialityChart, {
-                            type: 'bar',
-                            data: {
-                                labels: ['80+', '70-79', '60-69', '50-59', '40-49', '30-39', '20-29', '10-19', '0-9'],
-                                datasets: [{
-                                    label: '# Years of old',
-                                    data: fatalityRateByAgeData,
-                                    backgroundColor: [
-                                        'rgba(255, 99, 132, 0.2)',
-                                        'rgba(54, 162, 235, 0.2)',
-                                        'rgba(255, 206, 86, 0.2)',
-                                        'rgba(75, 192, 192, 0.2)',
-                                        'rgba(153, 102, 255, 0.2)',
-                                        'rgba(255, 159, 64, 0.2)'
-                                    ],
-                                    borderColor: [
-                                        'rgba(255, 99, 132, 1)',
-                                        'rgba(54, 162, 235, 1)',
-                                        'rgba(255, 206, 86, 1)',
-                                        'rgba(75, 192, 192, 1)',
-                                        'rgba(153, 102, 255, 1)',
-                                        'rgba(255, 159, 64, 1)'
-                                    ],
-                                    borderWidth: 1
-                                }]
-                            },
-                            options: {
-                                scales: {
-                                    yAxes: [{
-                                        ticks: {
-                                            beginAtZero: true
-                                        }
-                                    }]
-                                }
-                            }
-                            });*/
-                        })
-                        
-                </script>
                 <div>   
                     <h3 style="text-align: center; padding-top: 20px"><u>Reports</u></h3>
                     <div style="display:inline-block">
@@ -390,8 +312,8 @@
                     TotCases_1M_Pop : 0
                 };
                 $('#table').DataTable({
-                    pageLength: 26,
-                    lengthMenu: [26],
+                    pageLength: 20,
+                    lengthMenu: [20],
                     ajax: {
                         url: '/report-json',
                         type: 'GET',  
